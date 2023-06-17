@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body>
+    <h1>Form</h1>
+    <p id="success-text"></p>
+    <form method="post" id="post-form">
+        {% csrf_token %}
+        <p>Name: </p>
+        <input type="text" name="name" id="name" />
+        <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+
+        $(document).ready(function(e) {
+            $("#btn").click(function (e) {
+                alert("Hello, it is working")
+            })
+        })
+
+        $(document).on("submit", "#post-form", function(e) {
+            e.preventDefault()
+
+            $.ajax({
+                type: "POST",
+                url: "/create",
+                data: {
+                    name: $("#name").val(),
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                },
+                success: function(data) {
+                    $("#success-text").html(data)
+                }
+            })
+        })
+    </script>
+
+</body>
+</html>
