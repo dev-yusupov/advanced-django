@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator using Django</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'jquery.js' %}"></script>
+</head>
+<body>
+
+    <!-- <form id="form">
+        <input type="number" />
+        <button type="submit">Submit</button>
+    </form> -->
+
+    <form method="post" id="calc-form">
+        {% csrf_token %}
+        <p>First Number: </p>
+        <input type="number" name="num1" id="num1" />
+        <p>Second Number: </p>
+        <input type="number"  name="num2" id="num2" />
+
+        <select name="operation" id="operation">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+
+        <input type="submit" value="Solve" />
+    </form>
+
+    <h1>Result: </h1>
+    <h2 id="result"></h2>
+
+    <script>
+        $(document).on("submit", "#operations", function(e) {
+            e.preventDefault()
+
+            $.ajax({
+                type: "POST",
+                url: "/result",
+                data: {
+                    num1: $("#num1").val(),
+                    num2: $("#num2").val(),
+                    operation: $('select[name="operation"]').val(),
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val()
+                },
+                success: function(data) {
+                    $("#result").html(data)
+                }
+            })
+        })
+    </script>
+
+
+    
+</body>
+</html>
